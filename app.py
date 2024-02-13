@@ -1,5 +1,5 @@
 from random import choice
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -68,14 +68,25 @@ def get_quote_by_id(quote_id):
     return {"error": f"Quote with id={quote_id} not found"}, 404
 
 
+# dict -> json str
 @app.route("/quotes/count")
 def quotes_count():
     return {"count": len(quotes)}, 200
 
 
-@app.route("/quotes/random")
+# dict -> json str
+@app.route("/quotes/random", methods=['GET'])
 def random_quote():
     return choice(quotes), 200
+
+
+
+@app.route("/quotes", methods=['POST'])
+def create_quote():
+   data = request.json  # json -> dict
+   print("data = ", data, type(data))
+   return {}, 201
+
 
 
 if __name__ == "__main__":
