@@ -57,10 +57,11 @@ def get_quotes():
 # /quotes/8
 @app.route("/quotes/<int:quote_id>")
 def get_quote_by_id(quote_id):
-    """ function returns the quote by id. 
-        Type of quote is dict -> json """
+    """ Function returns the quote by id. 
+        Type of the quote is dict -> json str """
     for quote in quotes:
         if quote["id"] == quote_id:
+            # dict -> json str
             return quote, 200
         
     return {"error": f"Quote with id={quote_id} not found"}, 404
