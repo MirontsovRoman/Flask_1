@@ -1,3 +1,4 @@
+from random import choice
 from flask import Flask
 
 app = Flask(__name__)
@@ -65,6 +66,16 @@ def get_quote_by_id(quote_id):
             return quote, 200
         
     return {"error": f"Quote with id={quote_id} not found"}, 404
+
+
+@app.route("/quotes/count")
+def quotes_count():
+    return {"count": len(quotes)}, 200
+
+
+@app.route("/quotes/random")
+def random_quote():
+    return choice(quotes), 200
 
 
 if __name__ == "__main__":
