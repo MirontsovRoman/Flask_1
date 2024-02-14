@@ -1,6 +1,6 @@
 # Flask1 12022024
 
-## Установка CLI клиента для `sqlite3`
+### Установка CLI клиента для `sqlite3`
 ```
 sudo apt install sqlite3
 ```
