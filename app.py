@@ -1,5 +1,13 @@
 from random import choice
+import sqlite3
 from flask import Flask, request, jsonify
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).parent
+DATABASE = BASE_DIR / "test.db"  # <- тут путь к БД
+
+
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -49,7 +57,24 @@ def about():
 # /quotes
 @app.route("/quotes")
 def get_quotes():
-    return quotes
+    # Получение данных из БД
+    select_quotes = "SELECT * from quotes"
+    connection = sqlite3.connect("test.db")
+    cursor = connection.cursor()
+    cursor.execute(select_quotes)
+    quotes_db = cursor.fetchall()  # get list[tuple]
+    cursor.close()
+    connection.close()
+    # Подготовка данных для возврата 
+    # Необходимо выполнить преобразование:
+    # list[tuple] -> list[dict]
+    keys = ["id", "author", "text"]
+    quotes = []
+    for quote_db in quotes_db:
+        quote = dict(zip(keys, quote_db))
+        quotes.append(quote)
+
+    return jsonify(quotes)
 
 
 # /quotes/3
