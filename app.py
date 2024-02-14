@@ -2,6 +2,7 @@ from random import choice
 import sqlite3
 from flask import Flask, request, jsonify, g
 from pathlib import Path
+from werkzeug.exceptions import HTTPException
 
 
 BASE_DIR = Path(__file__).parent
@@ -25,11 +26,12 @@ def close_connection(exception):
         db.close()
 
 
-about_me = {
-   "name": "Вадим",
-   "surname": "Шиховцов",
-   "email": "vshihovcov@specialist.ru"
-}
+# Обработка ошибок и возврат сообщения в виде JSON
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    return jsonify({"message": e.description}), e.code
+
+
 
 quotes = [
    {
@@ -63,7 +65,12 @@ def hello_world():
 
 @app.route("/about")
 def about():
-    return about_me
+    about_me = {
+   "name": "Вадим",
+   "surname": "Шиховцов",
+   "email": "vshihovcov@specialist.ru"
+    }
+    return jsonify(about_me)
 
 
 # /quotes
