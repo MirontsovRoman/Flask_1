@@ -1,5 +1,5 @@
 from random import choice
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -69,7 +69,7 @@ def get_quote_by_id(quote_id):
 
 
 # dict -> json str
-@app.route("/quotes/count")
+@app.get("/quotes/count")
 def quotes_count():
     return {"count": len(quotes)}, 200
 
@@ -80,12 +80,44 @@ def random_quote():
     return choice(quotes), 200
 
 
-
 @app.route("/quotes", methods=['POST'])
 def create_quote():
-   data = request.json  # json -> dict
-   print("data = ", data, type(data))
-   return {}, 201
+    new_quote = request.json  # json -> dict
+    last_quote = quotes[-1]
+    new_id = last_quote['id'] + 1
+    new_quote['id'] = new_id
+    # Мы проверяем наличие ключа rating и диапазон значений, если он есть
+    rating = new_quote.get("rating")
+    if rating is None or rating not in range(1, 6):
+        new_quote["rating"] = 1 
+    quotes.append(new_quote)
+    return jsonify(new_quote), 201
+
+
+@app.route("/quotes/<int:quote_id>", methods=['PUT'])
+def edit_quote(quote_id):
+    new_data = request.json
+    if not set(new_data.keys()) - set(('author', 'text', 'rating')):
+        for quote in quotes:
+            if quote["id"] == quote_id:          
+                if "rating" in new_data and new_data["rating"] not in range(1, 6):
+                # Валидируем новое значение рейтинга, в случае успеха обновляем
+                    new_data.pop("rating")
+                quote.update(new_data)
+                return jsonify(quote), 200
+    else:
+        return {"error": f"Get bad data to update"}, 400
+    return {"error": f"Цитата c id={quote_id} не найдена"}, 404
+
+
+@app.delete("/quotes/<int:quote_id>")  # @app.route("/quotes/<int:quote_id>", methods=["DELETE"])
+def delete_quote(quote_id):
+    for quote in quotes:
+        if quote["id"] == quote_id:
+            quotes.remove(quote)
+            return jsonify({"message": f'Quote with id={quote_id} has deleted'}), 200
+    return {"error": f"Quote with id={quote_id} not found"}, 404
+
 
 
 
