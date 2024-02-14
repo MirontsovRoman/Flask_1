@@ -6,7 +6,7 @@ from werkzeug.exceptions import HTTPException
 
 
 BASE_DIR = Path(__file__).parent
-DATABASE = BASE_DIR / "test.db"  # <- тут путь к БД
+DATABASE = BASE_DIR / "quotes.db"  # <- тут путь к БД
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
