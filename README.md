@@ -25,4 +25,4 @@ db.create_all()
 URL |  Methods Allowed | Methods Not Allowed
 ----|------|-----
 /quotes | GET, POST, DELETE | PUT
-/quote/id | GET, PUT, DELETE | POST
+/quotes/id | GET, PUT, DELETE | POST
