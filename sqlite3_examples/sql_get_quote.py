@@ -1,0 +1,23 @@
+import sqlite3
+
+
+select_quotes = "SELECT * FROM quotes"
+
+# Подключение в БД
+connection = sqlite3.connect("quotes.db")
+
+# Создаем cursor, он позволяет делать SQL-запросы
+cursor = connection.cursor()
+
+# Выполняем запрос:
+cursor.execute(select_quotes)
+
+# Извлекаем результаты запроса
+quote = cursor.fetchone()
+print(f"{quote = }")
+
+# Закрыть курсор:
+cursor.close()
+
+# Закрыть соединение:
+connection.close()

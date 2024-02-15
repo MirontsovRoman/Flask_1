@@ -13,3 +13,9 @@ sqlite3 quotes.db ".read sqlite3_examples/quotes_db.sql"
  - [one](https://github.com/coalesca/Flask1_12022024.git)  
  - [two](https://github.com/ReQuest2024/Flask1.git)  
  - [three](https://github.com/NikolayMakovetsky/flask_restapi.git)  
+
+### URLs
+URL |  Methods Allowed | Methods Not Allowed
+----|------|-----
+/quotes | GET, POST, DELETE | PUT
+/quote/id | GET, PUT, DELETE | POST
