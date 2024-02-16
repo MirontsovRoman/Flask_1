@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).parent
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{BASE_DIR / 'main.db'}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{BASE_DIR / 'quotes.db'}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Для вывода содержимого SQL запросов
 # app.config["SQLALCHEMY_ECHO"] = True
@@ -18,27 +18,42 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-class QuoteModel(db.Model):
-    __tablename__ = "quotes"
+class AuthorModel(db.Model):
+    __tablename__ = "authors"
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(32), unique=False, nullable=False)
-    text = db.Column(db.String(255), unique=False, nullable=False)
+    name = db.Column(db.String(32), unique=True, nullable=False)
+    quotes = db.relationship('QuoteModel', backref='author', lazy='dynamic', cascade="all, delete-orphan")
 
-    def __init__(self, author, text):
-        self.author = author
-        self.text  = text
+    def __init__(self, name):
+        self.name = name
 
     def __repr__(self):
-        return f'Quote({self.author}, {self.text})'
-    
-    @staticmethod
-    def validate(in_data):
-        return set(in_data.keys()) == set(("author", "text"))
+        return f'Author({self.name})'
     
     def to_dict(self):
         return {
             "id": self.id,
-            "author": self.author,
+            "name": self.name
+        }
+
+
+class QuoteModel(db.Model):
+    __tablename__ = "quotes"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey(AuthorModel.id), nullable=False)
+    text = db.Column(db.String(255), unique=False, nullable=False)
+
+    def __init__(self, author, text):
+        self.author_id = author.id
+        self.text  = text
+
+    def __repr__(self):
+        return f'Quote({self.text})'
+       
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "author": self.author_id,
             "text": self.text
         }
 
@@ -48,6 +63,25 @@ class QuoteModel(db.Model):
 def handle_exception(e):
     return jsonify({"message": e.description}), e.code
 
+
+
+@app.route("/authors", methods=["POST"])
+def create_author():
+    author_data = request.json
+    author = AuthorModel(author_data.get("name", "Ivan"))
+    db.session.add(author)
+    db.session.commit()
+    return jsonify(author.to_dict()), 201
+
+
+@app.route("/authors/<int:author_id>/quotes", methods=["POST"])
+def create_quote_to_author(author_id):
+    author = AuthorModel.query.get(author_id)
+    data = request.json
+    new_quote = QuoteModel(author, data.get("text", "text"))
+    db.session.add(new_quote)
+    db.session.commit()
+    return new_quote.to_dict(), 201
 
 
 @app.route("/quotes")
@@ -72,17 +106,16 @@ def get_quote_by_id(quote_id):
 @app.post("/quotes")
 def create_quote():
     data = request.json
-    if QuoteModel.validate(data):
-        new_quote = QuoteModel(**data)
 
-        db.session.add(new_quote)
-        try:
-            db.session.commit()
-            return jsonify(new_quote.to_dict()), 200
-        except:       
-            abort(400, "NOT NULL constraint failed")
-    else:
-        abort(400, "Bad data")
+    new_quote = QuoteModel(**data)
+
+    db.session.add(new_quote)
+    try:
+        db.session.commit()
+        return jsonify(new_quote.to_dict()), 200
+    except:       
+        abort(400, "NOT NULL constraint failed")
+
 
 
 @app.delete("/quotes/<int:quote_id>")

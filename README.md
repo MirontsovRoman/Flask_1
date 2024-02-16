@@ -26,3 +26,13 @@ URL |  Methods Allowed | Methods Not Allowed
 ----|------|-----
 /quotes | GET, POST, DELETE | PUT
 /quotes/id | GET, PUT, DELETE | POST
+
+### Установка `ipython` в качестве интерпретатора для `flask shell`
+```bash
+pip install flask-shell-ipython
+```
+
+#### Запуск `ipython` в контексте `flask` приложения
+```
+flask shell
+```

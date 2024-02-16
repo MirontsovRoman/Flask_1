@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "QuotesAPI(Flask1)",
-    "dateExported": "2024-02-16T17:47:38.492Z",
+    "dateExported": "2024-02-16T18:34:00.492Z",
     "version": "1.1",
     "folders": [
         {
@@ -68,11 +68,11 @@
             "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
             "containerId": "99e0ace2-be25-4a40-8d46-94abfd2deed9",
             "name": "Create new quote",
-            "url": "127.0.0.1:5000/quotes",
+            "url": "127.0.0.1:5000/authors/2/quotes",
             "method": "POST",
             "sortNum": 50000,
             "created": "2024-02-13T16:02:39.256Z",
-            "modified": "2024-02-16T16:56:37.634Z",
+            "modified": "2024-02-16T18:32:01.828Z",
             "headers": [
                 {
                     "name": "Content-Type",
@@ -82,7 +82,7 @@
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"author\": \"Nick\",\n  \"text\": \"Nick's quote\"\n}",
+                "raw": "{\n  \"text\": \"Nick's quote\"\n}",
                 "form": []
             },
             "tests": []
@@ -153,6 +153,25 @@
                     "isPath": false
                 }
             ],
+            "tests": []
+        },
+        {
+            "_id": "6a41949d-d838-4fc0-9973-8afe8659cf90",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "",
+            "name": "Create new author",
+            "url": "127.0.0.1:5000/authors",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2024-02-16T18:26:31.213Z",
+            "modified": "2024-02-16T18:31:03.785Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Mike\"\n}",
+                "form": []
+            },
             "tests": []
         }
     ],
