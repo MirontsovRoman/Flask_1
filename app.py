@@ -119,5 +119,20 @@ def edit_quote(quote_id):
         abort(500)
 
 
+@app.route("/quotes/filter")
+def get_quotes_by_filter():
+    kwargs = request.args
+
+    # Универсальное решение  
+    quotes_db = QuoteModel.query.filter_by(**kwargs).all()
+
+    if quotes_db:
+        quotes = []
+        for quote in quotes_db:
+            quotes.append(quote.to_dict())      
+        return jsonify(quotes), 200
+    return jsonify([]), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
