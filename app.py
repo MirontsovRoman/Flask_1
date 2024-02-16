@@ -85,5 +85,39 @@ def create_quote():
         abort(400, "Bad data")
 
 
+@app.delete("/quotes/<int:quote_id>")
+def delete(quote_id):
+    quote = db.session.get(QuoteModel, quote_id)
+    if quote is not None:
+        db.session.delete(quote)
+        db.session.commit()
+        return jsonify(message=f"Row with id={quote_id} deleted."), 200
+    abort(404, f"Quote id = {quote_id} not found")
+
+
+@app.put("/quotes/<int:quote_id>")
+def edit_quote(quote_id):
+    new_data = request.json
+    quote = QuoteModel.query.get(quote_id)
+    if not quote:
+        abort(404, f"Quote id = {quote_id} not found")
+
+    # Частный случай
+    # if author := new_data.get("author"):
+    #     quote.author = author
+    # if text := new_data.get("text"):
+    #     quote.text = text
+        
+    # Универсальный случай
+    for key, value in new_data.items():
+        setattr(quote, key, value)
+
+    try:
+        db.session.commit()
+        return jsonify(quote.to_dict()), 200
+    except:
+        abort(500)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
