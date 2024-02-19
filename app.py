@@ -42,10 +42,12 @@ class QuoteModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey(AuthorModel.id), nullable=False)
     text = db.Column(db.String(255), unique=False, nullable=False)
+    rating = db.Column(db.Integer, unique=False, nullable=False, default="1", server_default="3")
 
-    def __init__(self, author, text):
+    def __init__(self, author, text, rating):
         self.author_id = author.id
         self.text  = text
+        self.rating = rating
 
     def __repr__(self):
         return f'Quote({self.text})'
@@ -54,8 +56,19 @@ class QuoteModel(db.Model):
         return {
             "id": self.id,
             "author": self.author_id,
-            "text": self.text
+            "text": self.text,
+            "rating": self.rating
         }
+
+
+def validate(in_data: dict, method="post") -> dict:
+    rating = in_data.setdefault("rating", 1)
+    if rating not in range(1, 6) and method == "post":
+        in_data["rating"] = 1
+    elif rating not in range(1, 6) and method == "put":
+        in_data.pop("rating")
+    in_data.setdefault("text", "text")
+    return in_data
 
 
 # Обработка ошибок и возврат сообщения в виде JSON
@@ -136,10 +149,17 @@ def delete_author(author_id):
 def create_quote_to_author(author_id):
     author = AuthorModel.query.get(author_id)
     data = request.json
-    new_quote = QuoteModel(author, data.get("text", "text"))
+    # Валидация данных
+    data = validate(data)
+
+    # После валидации создаем новую цитату
+    new_quote = QuoteModel(author, **data)
     db.session.add(new_quote)
-    db.session.commit()
-    return new_quote.to_dict(), 201
+    try:
+        db.session.commit()
+        return new_quote.to_dict(), 201
+    except:
+        abort(400, f"Database commit operation failed.")
 
 
 @app.route("/quotes")
@@ -188,19 +208,16 @@ def delete(quote_id):
 
 @app.put("/quotes/<int:quote_id>")
 def edit_quote(quote_id):
-    new_data = request.json
+    data = request.json
     quote = QuoteModel.query.get(quote_id)
     if not quote:
         abort(404, f"Quote id = {quote_id} not found")
 
-    # Частный случай
-    # if author := new_data.get("author"):
-    #     quote.author = author
-    # if text := new_data.get("text"):
-    #     quote.text = text
+    # Валидация данных
+    data = validate(data, "put")
         
     # Универсальный случай
-    for key, value in new_data.items():
+    for key, value in data.items():
         setattr(quote, key, value)
 
     try:

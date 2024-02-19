@@ -1,18 +1,67 @@
 {
     "client": "Thunder Client",
     "collectionName": "QuotesAPI(Flask1)",
-    "dateExported": "2024-02-16T18:34:00.492Z",
+    "dateExported": "2024-02-19T16:14:17.684Z",
     "version": "1.1",
     "folders": [
         {
             "_id": "99e0ace2-be25-4a40-8d46-94abfd2deed9",
-            "name": "Lesson01",
+            "name": "Quotes",
             "containerId": "",
             "created": "2024-02-13T16:02:39.252Z",
             "sortNum": 10000
+        },
+        {
+            "_id": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Authors",
+            "containerId": "",
+            "created": "2024-02-19T15:50:55.952Z",
+            "sortNum": 20000
         }
     ],
     "requests": [
+        {
+            "_id": "de5dfa02-9114-4f6c-b959-6dbbb7fd5977",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Get all authors",
+            "url": "127.0.0.1:5000/authors",
+            "method": "GET",
+            "sortNum": 5000,
+            "created": "2024-02-19T15:51:25.915Z",
+            "modified": "2024-02-19T15:51:56.107Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "75af79e7-ab10-4caf-b0e7-8703a2da66bc",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Get author by id",
+            "url": "127.0.0.1:5000/authors/2",
+            "method": "GET",
+            "sortNum": 7500,
+            "created": "2024-02-19T15:56:29.128Z",
+            "modified": "2024-02-19T16:13:01.544Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8aa80310-7149-43f5-9b98-4be5aaf06de4",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Get all quotes of author",
+            "url": "127.0.0.1:5000/authors/1/quotes",
+            "method": "GET",
+            "sortNum": 8750,
+            "created": "2024-02-19T16:07:12.504Z",
+            "modified": "2024-02-19T16:12:54.963Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
         {
             "_id": "f3d3bcb9-b7bb-4728-847d-a792ba6e1992",
             "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
@@ -24,6 +73,25 @@
             "created": "2024-02-13T16:02:39.252Z",
             "modified": "2024-02-13T16:02:39.252Z",
             "headers": []
+        },
+        {
+            "_id": "6a41949d-d838-4fc0-9973-8afe8659cf90",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Create new author",
+            "url": "127.0.0.1:5000/authors",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-02-16T18:26:31.213Z",
+            "modified": "2024-02-19T15:53:31.011Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Stepan\"\n}",
+                "form": []
+            },
+            "tests": []
         },
         {
             "_id": "4787f686-e27d-49be-88ca-e9017b7b28f4",
@@ -40,6 +108,25 @@
             "tests": []
         },
         {
+            "_id": "994c5b68-9163-47e3-9c67-1b6eab8f425f",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Get author by id Copy",
+            "url": "127.0.0.1:5000/authors/4",
+            "method": "PUT",
+            "sortNum": 20000,
+            "created": "2024-02-19T15:58:35.322Z",
+            "modified": "2024-02-19T15:59:35.210Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"old Name to new Name\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
             "_id": "8eeec5eb-20c0-4dae-a3e8-d23ef6e7d223",
             "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
             "containerId": "99e0ace2-be25-4a40-8d46-94abfd2deed9",
@@ -50,6 +137,20 @@
             "created": "2024-02-13T16:02:39.254Z",
             "modified": "2024-02-13T16:02:39.254Z",
             "headers": []
+        },
+        {
+            "_id": "9033507f-76e4-4db4-9c50-e37279b88028",
+            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
+            "containerId": "45ee2f92-706d-4988-8cc5-5bbebb327cc7",
+            "name": "Delete author by id",
+            "url": "127.0.0.1:5000/authors/4",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2024-02-19T16:11:56.705Z",
+            "modified": "2024-02-19T16:13:10.582Z",
+            "headers": [],
+            "params": [],
+            "tests": []
         },
         {
             "_id": "b6480246-8de9-4894-935a-d67567101508",
@@ -153,25 +254,6 @@
                     "isPath": false
                 }
             ],
-            "tests": []
-        },
-        {
-            "_id": "6a41949d-d838-4fc0-9973-8afe8659cf90",
-            "colId": "5d0c118b-5312-4064-9c9f-fb47e98c9d0d",
-            "containerId": "",
-            "name": "Create new author",
-            "url": "127.0.0.1:5000/authors",
-            "method": "POST",
-            "sortNum": 90000,
-            "created": "2024-02-16T18:26:31.213Z",
-            "modified": "2024-02-16T18:31:03.785Z",
-            "headers": [],
-            "params": [],
-            "body": {
-                "type": "json",
-                "raw": "{\n  \"name\": \"Mike\"\n}",
-                "form": []
-            },
             "tests": []
         }
     ],
