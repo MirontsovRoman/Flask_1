@@ -147,6 +147,7 @@ def delete_author(author_id):
 
 @app.route("/authors/<int:author_id>/quotes", methods=["POST"])
 def create_quote_to_author(author_id):
+    """ function to create new quote to author"""
     author = AuthorModel.query.get(author_id)
     data = request.json
     # Валидация данных
